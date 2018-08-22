@@ -11,9 +11,14 @@ import UIKit
 class ToDoViewController: UITableViewController {
 
     var anArray : [String] = []
+    var defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String]{
+            anArray = items
+        }
     }
     
     //MARK: tableView
@@ -49,7 +54,7 @@ class ToDoViewController: UITableViewController {
         let alert = UIAlertController(title: "Test", message: "Message", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "test", style: .default) { (action) in
-            self.anArray.append(textfield.text!)
+            self.defaults.set(self.anArray, forKey: "ToDoListArray")
             self.tableView.reloadData()
             print(textfield.text)
             print("Success")
