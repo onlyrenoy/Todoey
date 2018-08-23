@@ -10,7 +10,7 @@ import UIKit
 
 class ToDoViewController: UITableViewController {
 
-    var items = [Item]()
+    var itemsArray = [Item]()
     var defaults = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -18,38 +18,41 @@ class ToDoViewController: UITableViewController {
         
         let item1 = Item()
         item1.title = "something"
-        items.append(item1)
+        itemsArray.append(item1)
         
-//        if let items = defaults.array(forKey: "ToDoListArray") as? [Item]{
-//            items = items
+        if let itemsu = defaults.array(forKey: "ToDoListArray") as? [Item]{
+            itemsArray = itemsu
         }
+    }
     
     //MARK: tableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return itemsArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = items[indexPath.row].title
+        let leItem = itemsArray[indexPath.row]
         
-        if items[indexPath.row].done == true {
-            cell.accessoryType = .checkmark
-        }else{
-            cell.accessoryType = .none
-        }
+        cell.textLabel?.text = leItem.title
         
 
+        cell.accessoryType = leItem.done ? .checkmark : .none
+        
+//        if leItem.done == true {
+//            cell.accessoryType = .checkmark
+//        }else{
+//            cell.accessoryType = .none
+//        }
         
         return cell
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(items[indexPath.row])
+        print(itemsArray[indexPath.row])
         
-        items[indexPath.row].done = !items[indexPath.row].done
+        itemsArray[indexPath.row].done = !itemsArray[indexPath.row].done
         
         tableView.reloadData()
         
@@ -68,8 +71,8 @@ class ToDoViewController: UITableViewController {
             let newItem = Item()
             newItem.title = textfield.text!
             
-            self.items.append(newItem)
-            self.defaults.set(self.items, forKey: "ToDoListArray")
+            self.itemsArray.append(newItem)
+            self.defaults.set(self.itemsArray, forKey: "ToDoListArray")
             self.tableView.reloadData()
             
             print("Success")
@@ -88,3 +91,4 @@ class ToDoViewController: UITableViewController {
     
 
 }
+
